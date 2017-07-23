@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''
+Created on 2017-06-18
+@author: yitengfei
+
+'''
 import argparse
 
 import paddle.v2 as paddle
