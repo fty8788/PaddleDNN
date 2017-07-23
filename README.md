@@ -2,7 +2,7 @@
 ## 模型结构
 **DNN 模型结构入下图所示：**
 <p align="center">
-<img src="images/DNN.png" width="620" hspace='10'/> <br/>
+<img src="images/DNN.png" width="620" hspace='20'/> <br/>
 Figure 1. DNN 模型结构
 </p>
 模型主要分为如下几个部分：
