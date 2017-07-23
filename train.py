@@ -6,7 +6,7 @@ import paddle.v2 as paddle
 import reader
 from utils import TaskType, load_dic, logger, ModelType, ModelArch, display_args
 
-parser = argparse.ArgumentParser(description="PaddlePaddle DSSM example")
+parser = argparse.ArgumentParser(description="PaddlePaddle DNN model")
 
 parser.add_argument(
     '-d',
@@ -103,12 +103,17 @@ def train(data_path=None,
     # network config
     input_layer = paddle.layer.data(name='input_layer', type=paddle.data_type.dense_vector(feature_dim))
     dnn = create_dnn(input_layer)
-    #y_predict = paddle.layer.fc(input=x, size=1, act=paddle.activation.Linear())
-    #y = paddle.layer.data(name='y', type=paddle.data_type.dense_vector(1))
-    #cost = paddle.layer.mse_cost(input=y_predict, label=y)
-    prediction = paddle.layer.fc(input=dnn, size=class_num, act=paddle.activation.Softmax())
-    label = paddle.layer.data(name='label', type=paddle.data_type.integer_value(class_num))
-    cost = paddle.layer.classification_cost(input=prediction, label=label)
+    prediction = None
+    label = None
+    cost = None
+    if args.model_type.is_classification():
+        prediction = paddle.layer.fc(input=dnn, size=class_num, act=paddle.activation.Softmax())
+        label = paddle.layer.data(name='label', type=paddle.data_type.integer_value(class_num))
+        cost = paddle.layer.classification_cost(input=prediction, label=label)
+    elif args.model_type.is_regression():
+        prediction = paddle.layer.fc(input=dnn, size=1, act=paddle.activation.Linear())
+        label = paddle.layer.data(name='label', type=paddle.data_type.dense_vector(1))
+        cost = paddle.layer.mse_cost(input=prediction, label=label)
 
     # create parameters
     parameters = paddle.parameters.create(cost)
@@ -132,14 +137,20 @@ def train(data_path=None,
 
         if isinstance(event, paddle.event.EndPass):
             result = trainer.test(
-                reader=paddle.batch(reader.test(data_path, feature_dim+1), batch_size=batch_size),
+                reader=paddle.batch(reader.test(data_path,
+                                            feature_dim+1,
+                                            args.model_type.is_classification()),
+                            batch_size=batch_size),
                 feeding=feeding)
             print "Test %d, Cost %f, %s" % (event.pass_id, result.cost, result.metrics)
 
     # training
     trainer.train(
         reader=paddle.batch(
-            paddle.reader.shuffle(reader.train(data_path, feature_dim+1), buf_size=batch_size*10),
+            paddle.reader.shuffle(reader.train(data_path,
+                                            feature_dim+1,
+                                            args.model_type.is_classification()),
+                    buf_size=batch_size*10),
             batch_size=batch_size),
         feeding=feeding,
         event_handler=event_handler,

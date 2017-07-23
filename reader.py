@@ -49,7 +49,7 @@ def load_data(filename, feature_num=14, ratio=0.8):
     TEST_DATA = data[offset:]
 
 
-def train(data_path, split_num):
+def train(data_path, split_num, is_classification):
     """
     UCI_HOUSING training set creator.
 
@@ -65,12 +65,15 @@ def train(data_path, split_num):
 
     def reader():
         for d in TRAIN_DATA:
-            yield d[:-1], int(d[-1])
+            if is_classification:
+                yield d[:-1], int(d[-1])
+            else:
+                yield d[:-1], d[-1:]
 
     return reader
 
 
-def test(data_path, split_num):
+def test(data_path, split_num, is_classification):
     """
     UCI_HOUSING test set creator.
 
@@ -86,7 +89,10 @@ def test(data_path, split_num):
 
     def reader():
         for d in TEST_DATA:
-            yield d[:-1], int(d[-1:])
+            if is_classification:
+                yield d[:-1], int(d[-1])
+            else:
+                yield d[:-1], d[-1:]
 
     return reader
 
