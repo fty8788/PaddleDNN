@@ -1,9 +1,14 @@
 # DNN模型
 ## 模型结构
+**DNN 模型结构入下图所示：**
 <p align="center">
 <img src="images/DNN.png" width="620" hspace='10'/> <br/>
 Figure 1. DNN 模型结构
 </p>
+模型主要分为如下几个部分：
+- **输入层**：输入连续值特征，特征维度由-f指定
+- **全连接隐层**：输入向量被送入N个连续的隐层，隐层之间为全连接结构。
+- **输出层**：输出层的神经元数量和样本的类别数一致，例如在二分类问题中，输出层会有2个神经元。通过Softmax激活函数，输出结果是一个归一化的概率分布，和为1，因此第$i$个神经元的输出就可以认为是样本属于第$i$类的预测概率。
 
 # 模型训练
 1. 数据组织
@@ -43,7 +48,8 @@ optional arguments:
                         num worker threads, default 1
   --use_gpu USE_GPU     whether to use GPU devices (default: False)
 ```
-  - `data_path` ： 数据集的路径
+  
+  - `data_path` ： 数据集的路径
   - `num_passes`: 模型训练多少轮
   - `model_type`: 模型分类或回归
   - `feature_dim`: 输入特征的维度
