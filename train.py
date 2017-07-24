@@ -17,8 +17,13 @@ parser.add_argument(
     '-d',
     '--data_path',
     type=str,
-    required=False,
+    required=True,
     help="path of training dataset")
+parser.add_argument(
+    '--model_output_prefix',
+    type=str,
+    default="./",
+    help="prefix of the path for model to store, (default: ./)")
 parser.add_argument(
     '-b',
     '--batch_size',
@@ -148,6 +153,13 @@ def train(data_path=None,
                             batch_size=batch_size),
                 feeding=feeding)
             print "Test %d, Cost %f, %s" % (event.pass_id, result.cost, result.metrics)
+            
+            model_desc = "{type}".format(
+                    type=str(args.model_type))
+            with open("%sdnn_%s_pass_%05d.tar" %
+                          (args.model_output_prefix, model_desc,
+                           event.pass_id), "w") as f:
+                parameters.to_tar(f)
 
     # training
     trainer.train(

@@ -84,7 +84,7 @@ class TaskType(object):
 
 
 class ModelType:
-    modes = 'classification rank regression'.split()
+    modes = 'classification regression'.split()
 
     def __init__(self, mode):
         _init_(self, mode, ModelType)

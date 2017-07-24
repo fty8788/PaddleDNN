@@ -12,6 +12,7 @@ __all__ = ['train', 'test']
 
 TRAIN_DATA = None
 TEST_DATA = None
+ALL_DATA = None
 
 
 def feature_range(maximums, minimums):
@@ -33,7 +34,7 @@ def feature_range(maximums, minimums):
 
 
 def load_data(filename, feature_num=14, ratio=0.8):
-    global TRAIN_DATA, TEST_DATA
+    global TRAIN_DATA, TEST_DATA, ALL_DATA
     if TRAIN_DATA is not None and TEST_DATA is not None:
         return
     
@@ -52,11 +53,13 @@ def load_data(filename, feature_num=14, ratio=0.8):
     print data.shape[0]
     TRAIN_DATA = data[:offset]
     TEST_DATA = data[offset:]
+    ALL_DATA = data
+    return data
 
 
 def train(data_path, split_num, is_classification):
     """
-    UCI_HOUSING training set creator.
+    training set creator.
 
     It returns a reader creator, each sample in the reader is features after
     normalization and price number.
@@ -66,7 +69,6 @@ def train(data_path, split_num, is_classification):
     """
     global TRAIN_DATA
     load_data(data_path, split_num)
-    #load_data("housing.data")
 
     def reader():
         for d in TRAIN_DATA:
@@ -80,7 +82,7 @@ def train(data_path, split_num, is_classification):
 
 def test(data_path, split_num, is_classification):
     """
-    UCI_HOUSING test set creator.
+    test set creator.
 
     It returns a reader creator, each sample in the reader is features after
     normalization and price number.
@@ -90,7 +92,6 @@ def test(data_path, split_num, is_classification):
     """
     global TEST_DATA
     load_data(data_path, split_num)
-    #load_data("housing.data")
 
     def reader():
         for d in TEST_DATA:
@@ -101,4 +102,24 @@ def test(data_path, split_num, is_classification):
 
     return reader
 
+def all(data_path, split_num, is_classification):
+    """
+    all set creator.
 
+    It returns a reader creator, each sample in the reader is features after
+    normalization and price number.
+
+    :return: Test reader creator
+    :rtype: callable
+    """
+    global ALL_DATA
+    load_data(data_path, split_num)
+
+    def reader():
+        for d in ALL_DATA:
+            if is_classification:
+                yield d[:-1], int(d[-1])
+            else:
+                yield d[:-1], d[-1:]
+
+    return reader
