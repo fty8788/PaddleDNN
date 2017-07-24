@@ -42,7 +42,7 @@ optional arguments:
   -p NUM_PASSES, --num_passes NUM_PASSES
                         number of passes to run(default:50)
   -y MODEL_TYPE, --model_type MODEL_TYPE
-                        model type, 0 for classification, 2 for regression
+                        model type, 0 for classification, 1 for regression
                         (default: classification)
   -f FEATURE_DIM, --feature_dim FEATURE_DIM
                         dimention of feature, default is 800
