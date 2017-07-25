@@ -18,7 +18,7 @@ Figure 1. DNN 模型结构
 
 1. 数据组织
 
-假设有如下格式的训练数据：每一行为一条样本，以 ` ` 分隔，前十列是输入10维特征，最后一列是类别标签。以下是两条示例数据：
+假设有如下格式的训练数据：每一行为一条样本，以空格分隔，前十列是输入10维特征，最后一列是类别标签。以下是两条示例数据：
 ```
 0.1633836 -0.3711518 -0.0259373 0.1322735 0.0876563 0.2604049 0.0125503 0.2634946 0.1022274 0.6153814 1
 -0.257876 0.492843 0.0172795 -0.6734815 -0.0109225 0.115816 -0.781423 0.6629765 0.062654 -0.107251 0
@@ -42,7 +42,7 @@ optional arguments:
   -p NUM_PASSES, --num_passes NUM_PASSES
                         number of passes to run(default:50)
   -y MODEL_TYPE, --model_type MODEL_TYPE
-                        model type, 0 for classification, 2 for regression
+                        model type, 0 for classification, 1 for regression
                         (default: classification)
   -f FEATURE_DIM, --feature_dim FEATURE_DIM
                         dimention of feature, default is 800
