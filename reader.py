@@ -32,7 +32,7 @@ def feature_range(maximums, minimums):
     fig.savefig('image/ranges.png', dpi=48)
     plt.close(fig)
 
-
+NORMALIZE = True
 def load_data(filename, feature_num=14, ratio=0.8):
     global TRAIN_DATA, TEST_DATA, ALL_DATA
     if TRAIN_DATA is not None and TEST_DATA is not None:
@@ -40,14 +40,15 @@ def load_data(filename, feature_num=14, ratio=0.8):
     
     data = np.fromfile(filename, sep=' ')
     data = data.reshape(data.shape[0] / feature_num, feature_num)
-    maximums, minimums, avgs = data.max(axis=0), data.min(axis=0), data.sum(
-        axis=0) / data.shape[0]
-    #feature_range(maximums[:-1], minimums[:-1])
-    for i in xrange(feature_num - 1):
-        data[:, i] = (data[:, i] - avgs[i]) / (maximums[i] - minimums[i])
-    for i in xrange(len(data)):
-        x = int(data[i, -1])
-        data[i, -1] = x
+    if NORMALIZE: 
+        maximums, minimums, avgs = data.max(axis=0), data.min(axis=0), data.sum(
+            axis=0) / data.shape[0]
+        #feature_range(maximums[:-1], minimums[:-1])
+        for i in xrange(feature_num - 1):
+            data[:, i] = (data[:, i] - avgs[i]) / (maximums[i] - minimums[i])
+        for i in xrange(len(data)):
+            x = int(data[i, -1])
+            data[i, -1] = x
     offset = int(data.shape[0] * ratio)
 
     print data.shape[0]

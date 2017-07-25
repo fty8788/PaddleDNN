@@ -3,7 +3,7 @@ from sklearn import metrics
 label = []
 y = []
 
-with open("paddle_gu_1_10.balance.s.t.p") as f:
+with open("paddle_gu_1_10.balance.s.t.p3") as f:
     for line in f:
         fs = line.split(' ')
         if len(fs) < 802:
